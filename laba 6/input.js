@@ -18,7 +18,6 @@ targets.forEach(target => {
 targets.forEach(target => {
     target.addEventListener('touchstart', (event) => {
         if (event.touches.length === 2) {
-            // Если два пальца касаются экрана, сбрасываем перетаскивание
             resetDragging();
             return;
         }

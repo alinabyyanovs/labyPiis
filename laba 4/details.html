@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница деталей</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="shirt-title"></h1>
+        <div class="content">
+            <div class="image-container">
+                <img id="shirt-image" src="" alt="">
+            </div>
+            <div class="color-buttons-container" id="color-buttons"></div>
+            <div class="view-buttons">
+                <button id="show-front">Показать переднюю сторону</button>
+                <button id="show-back">Показать заднюю сторону</button>
+            </div>
+        </div>
+        <p id="shirt-description"></p>
+        <p id="shirt-price"></p>
+        <button onclick="goBack()">Назад</button>
+    </div>
+    <script src="shirts.js"></script>
+    <script src="details.js"></script>
+</body>
+</html>

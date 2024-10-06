@@ -7,85 +7,90 @@ let offsetX = 0; // Смещение по оси X
 let offsetY = 0; // Смещение по оси Y
 let originalPosition = { top: 0, left: 0 }; // Исходная позиция элемента
 
-// Обработчик двойного клика
+// Обработчик двойного клика (мышь)
 targets.forEach(target => {
     target.addEventListener('dblclick', (event) => {
-        isPinned = true;
-        currentElement = event.target;
-        currentElement.style.backgroundColor = 'blue'; // Меняем цвет
-        setPosition(event);
+        togglePin(event.target);
     });
 });
 
-// Обработчик нажатия мыши
+// Обработчик двойного касания (сенсорный экран)
+targets.forEach(target => {
+    target.addEventListener('touchstart', (event) => {
+        if (event.touches.length === 2) {
+            // Если два пальца касаются экрана, сбрасываем перетаскивание
+            resetDragging();
+            return;
+        }
+        if (isPinned) {
+            togglePin(event.target);
+        } else {
+            currentElement = event.target;
+            isPinned = true;
+            currentElement.style.backgroundColor = 'yellow';
+            setPosition(event.touches[0]);
+        }
+    });
+});
+
+// Нажатие мыши
 targets.forEach(target => {
     target.addEventListener('mousedown', (event) => {
-        currentElement = event.target;
-        isDragging = true;
-
-        originalPosition.top = currentElement.offsetTop;
-        originalPosition.left = currentElement.offsetLeft;
-
-        offsetX = event.clientX - currentElement.getBoundingClientRect().left;
-        offsetY = event.clientY - currentElement.getBoundingClientRect().top;
+        if (!isPinned) {
+            startDragging(event.target, event);
+        }
     });
 });
 
-// Обработчик перемещения мыши
+// Перемещение мыши
 document.addEventListener('mousemove', (event) => {
-    if (isDragging || isPinned) {
+    if (isDragging) {
+        setPosition(event);
+    }
+    if (isPinned && currentElement) {
         setPosition(event);
     }
 });
 
-// Обработчик отпускания мыши
+// Перемещение пальца (сенсорный экран)
+document.addEventListener('touchmove', (event) => {
+    if (isDragging) {
+        setPosition(event.touches[0]);
+    }
+    if (isPinned && currentElement) {
+        setPosition(event.touches[0]);
+    }
+});
+
+// Отпускание мыши
 document.addEventListener('mouseup', () => {
     if (isDragging) {
         isDragging = false;
-    } else if (isPinned) {
-        isPinned = false;
-        if (currentElement) {
-            currentElement.style.backgroundColor = 'red'; // Возвращаем цвет
-        }
     }
 });
 
-// Обработчик клавиши Esc
+// Отпускание пальца (сенсорный экран)
+document.addEventListener('touchend', (event) => {
+    if (isDragging) {
+        isDragging = false;
+    }
+});
+
+// Клик для открепления
+document.addEventListener('click', (event) => {
+    if (isPinned && currentElement) {
+        togglePin(currentElement);
+    }
+});
+
+// Esc
 document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && currentElement) {
-        resetElement();
+        resetDragging();
     }
 });
 
-// Обработчики сенсорных событий
-targets.forEach(target => {
-    target.addEventListener('touchstart', (event) => {
-        const touch = event.touches[0];
-        currentElement = event.target;
-        isDragging = true;
-
-        originalPosition.top = currentElement.offsetTop;
-        originalPosition.left = currentElement.offsetLeft;
-
-        offsetX = touch.clientX - currentElement.getBoundingClientRect().left;
-        offsetY = touch.clientY - currentElement.getBoundingClientRect().top;
-    });
-
-    target.addEventListener('touchmove', (event) => {
-        if (isDragging) {
-            const touch = event.touches[0];
-            setPosition(touch);
-        }
-    });
-
-    target.addEventListener('touchend', (event) => {
-        if (isDragging) {
-            resetElement();
-        }
-    });
-});
-
-// Функция для установки позиции элемента
+// Функция для установки новых позиций
 function setPosition(event) {
     if (currentElement) {
         currentElement.style.top = `${event.clientY - offsetY}px`;
@@ -93,11 +98,37 @@ function setPosition(event) {
     }
 }
 
-// Функция для сброса позиции элемента
-function resetElement() {
-    currentElement.style.top = `${originalPosition.top}px`;
-    currentElement.style.left = `${originalPosition.left}px`;
-    isDragging = false;
-    isPinned = false;
-    currentElement = null;
+// Функция для начала перетаскивания
+function startDragging(target, event) {
+    currentElement = target;
+    isDragging = true;
+    originalPosition.top = currentElement.offsetTop;
+    originalPosition.left = currentElement.offsetLeft;
+    offsetX = event.clientX - currentElement.getBoundingClientRect().left;
+    offsetY = event.clientY - currentElement.getBoundingClientRect().top;
+}
+
+// Функция для переключения режима "приклеивания"
+function togglePin(target) {
+    if (isPinned) {
+        isPinned = false;
+        target.style.backgroundColor = ''; // Сброс цвета
+        currentElement = null;
+    } else {
+        isPinned = true;
+        currentElement = target;
+        currentElement.style.backgroundColor = 'yellow';
+        setPosition(event);
+    }
+}
+
+// Функция для сброса перетаскивания
+function resetDragging() {
+    if (currentElement) {
+        currentElement.style.top = `${originalPosition.top}px`;
+        currentElement.style.left = `${originalPosition.left}px`;
+        isDragging = false;
+        isPinned = false;
+        currentElement = null;
+    }
 }

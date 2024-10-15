@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мини графический редактор</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Мини графический редактор</h1>
+    <div>
+        <label>
+            <input type="radio" name="shape" value="circle" checked> Круг
+        </label>
+        <label>
+            <input type="radio" name="shape" value="rectangle"> Прямоугольник
+        </label>
+        <label>
+            <input type="radio" name="shape" value="triangle"> Треугольник
+        </label>
+        <label>
+            <input type="radio" name="shape" value="ellipse"> Эллипс
+        </label>
+        <label>
+            <input type="radio" name="shape" value="line"> Линия
+        </label>
+    </div>
+    <div>
+        <label for="colorPicker">Выберите цвет:</label>
+        <input type="color" id="colorPicker" value="#000000">
+    </div>
+    <button id="clearCanvas">Очистить холст</button>
+    <svg id="canvas" width="800" height="600" style="border: 1px solid black;"></svg>
+    <script src="script.js"></script>
+</body>
+</html>

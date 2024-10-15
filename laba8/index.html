@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Графический редактор на Canvas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Графический редактор</h1>
+    <div class="controls">
+        <div class="shape-option">
+            <input type="radio" name="shape" value="circle" checked> Круг
+        </div>
+        <div class="shape-option">
+            <input type="radio" name="shape" value="rectangle"> Прямоугольник
+        </div>
+        <div class="shape-option">
+            <input type="radio" name="shape" value="triangle"> Треугольник
+        </div>
+        <div class="shape-option">
+            <input type="radio" name="shape" value="ellipse"> Эллипс
+        </div>
+        <div class="shape-option">
+            <input type="radio" name="shape" value="line"> Линия
+        </div>
+        <label for="colorPicker">Цвет:</label>
+        <input type="color" id="colorPicker" value="#000000">
+        <button id="clearCanvas">Очистить</button>
+    </div>
+    <canvas id="canvas" width="800" height="400"></canvas>
+    <script src="script.js"></script>
+</body>
+</html>
